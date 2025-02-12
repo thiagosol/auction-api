@@ -4,6 +4,7 @@ use actix_web::{web, HttpResponse, Responder};
 use sqlx::Error;
 use sqlx::PgPool;
 use sqlx::Row;
+use tracing::info;
 
 use crate::models::condition::Condition;
 use crate::models::property::Property;
@@ -13,7 +14,11 @@ pub async fn get_properties(
     pool: web::Data<PgPool>,
     query_params: web::Query<PropertyQueryParams>,
 ) -> impl Responder {
-    let mut query = String::from("SELECT p.external_id AS id, 
+
+    info!("/auction/properties - in request");
+
+    let mut query = String::from(
+        "SELECT p.external_id AS id, 
             p.external_id,
             m.name as modality,
             p.title, p.appraisal_value, p.value, p.discount, 
@@ -23,7 +28,8 @@ pub async fn get_properties(
             p.created_at, p.modality_id
         FROM property p
         INNER JOIN modality m on m.id = p.modality_id
-        WHERE 1=1");
+        WHERE 1=1",
+    );
 
     let mut params: Vec<String> = Vec::new();
 
@@ -77,7 +83,8 @@ pub async fn get_properties(
     let rows = match query_exec.fetch_all(pool.get_ref()).await {
         Ok(rows) => rows,
         Err(err) => {
-            eprintln!("Erro ao buscar propriedades: {:?}", err);
+            eprintln!("Error: {:?}", err);
+            tracing::error!("/auction/properties - in response error - {:?}", err);
             return HttpResponse::InternalServerError().finish();
         }
     };
@@ -141,6 +148,7 @@ pub async fn get_properties(
         );
     }
 
+    info!("/auction/properties - in response");
     HttpResponse::Ok().json(properties)
 }
 
