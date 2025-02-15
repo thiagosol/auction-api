@@ -17,7 +17,18 @@ services:
       - "traefik.http.routers.auction-api-secure.tls=true"
       - "traefik.http.routers.auction-api-secure.service=auction-api-secure"
       - "traefik.http.services.auction-api-secure.loadbalancer.server.port=8080"
-      - "traefik.docker.network=proxy"
+      - "traefik.docker.network=external-sol-apis"
+    networks:
+      - external-sol-apis
+      - logging-network
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://loki:3100/loki/api/v1/push"
+        loki-external-labels: "service=auction-api,type=service"
+        loki-retries: "5"
+        loki-batch-size: "400"
+        mode: "non-blocking"
     environment:
       - RUST_LOG=info
     deploy:
@@ -26,6 +37,7 @@ services:
           memory: 100M
 
 networks:
-  default:
-    external:
-      name: external-sol-apis
+  logging-network:
+    external: true
+  external-sol-apis:
+    external: true
