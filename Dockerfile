@@ -19,8 +19,11 @@ COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/auction-api-ru
 
 RUN chmod +x /app/auction-api-rust
 
-ARG DATABASE_URL
-ENV DATABASE_URL=${DATABASE_URL}
+ARG DB_POSTGRES_USER
+ENV DB_POSTGRES_USER=${DB_POSTGRES_USER}
+
+ARG DB_POSTGRES_PASS
+ENV DB_POSTGRES_PASS=${DB_POSTGRES_PASS}
 
 EXPOSE 8080
 

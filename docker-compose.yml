@@ -11,9 +11,9 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.auction-api.entrypoints=http"
-      - "traefik.http.routers.auction-api.rule=Host(`api.leilao.thiagosol.com`) || Host(`www.api.leilao.thiagosol.com`)"
+      - "traefik.http.routers.auction-api.rule=Host(`api-leilao.thiagosol.com`)"
       - "traefik.http.routers.auction-api-secure.entrypoints=https"
-      - "traefik.http.routers.auction-api-secure.rule=Host(`api.leilao.thiagosol.com`) || Host(`www.api.leilao.thiagosol.com`)"
+      - "traefik.http.routers.auction-api-secure.rule=Host(`api-leilao.thiagosol.com`)"
       - "traefik.http.routers.auction-api-secure.tls=true"
       - "traefik.http.routers.auction-api-secure.service=auction-api-secure"
       - "traefik.http.services.auction-api-secure.loadbalancer.server.port=8080"
