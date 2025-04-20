@@ -14,6 +14,7 @@ services:
       - "traefik.http.routers.auction-api.entrypoints=https"
       - "traefik.http.routers.auction-api.tls=true"
       - "traefik.http.services.auction-api.loadbalancer.server.port=8080"
+      - "traefik.http.routers.auction-api.middlewares=leilao-auth@docker, leilao-cors@docker"
       - "traefik.docker.network=proxy"
     networks:
       - external-sol-apis
