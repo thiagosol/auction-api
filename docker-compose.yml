@@ -8,14 +8,6 @@ services:
     container_name: auction-api
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.auction-api.rule=Host(`api-leilao.thiagosol.com`)"
-      - "traefik.http.routers.auction-api.entrypoints=https"
-      - "traefik.http.routers.auction-api.tls=true"
-      - "traefik.http.services.auction-api.loadbalancer.server.port=8080"
-      - "traefik.http.routers.auction-api.middlewares=leilao-auth@docker, leilao-cors@docker"
-      - "traefik.docker.network=proxy"
     networks:
       - external-sol-apis
       - logging-network
